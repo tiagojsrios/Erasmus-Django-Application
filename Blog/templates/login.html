@@ -1,0 +1,44 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <meta charset="UTF-8">
+        <title>Erasmus Experiences - Login</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+
+    <body>
+        <div id="login-box">
+            <div class="left">
+                <h1>Sign up</h1>
+
+                <form method="POST" action="/blog/signup/">
+                    {% csrf_token %}
+
+                    <input type="text" name="username" placeholder="Username" />
+                    <input type="text" name="email" placeholder="E-mail" />
+                    <input type="password" name="password1" placeholder="Password" />
+                    <input type="password" name="password2" placeholder="Retype Password" />
+
+                    <input type="submit" name="signup_submit" value="Sign me up" />
+                </form>
+            </div>
+
+            <div class="right">
+                <h1>Login</h1>
+
+                <form method="POST" action="/blog/login/">
+                    {% csrf_token %}
+
+                    <input type="text" name="username" placeholder="Username" />
+                    <input type="password" name="password" placeholder="Password" />
+
+                    <input type="submit" name="login_submit" value="Log me in" />
+                </form>
+            </div>
+
+            <div class="or">OR</div>
+        </div>
+    </body>
+</html>

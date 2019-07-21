@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <script>
+        $("").bar({
+            color            : '#333',
+            background_color : '#fffeec',
+            position         : 'top',
+            removebutton     : false,
+            message          : '20% off everything sale!   <font size="1">(Auto close in 4 secs)</font>',
+            time             : 4000
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,18 @@
+.publish {
+    position: relative;
+    right: 70%;
+    background-color: #5385c1;
+    border: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.btn span.icon {
+    background: url('../images/pic01.jpg') no-repeat;
+    float: left;
+    width: 10px;
+    height: 40px;
+}

@@ -1,0 +1,138 @@
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Erasmus Experiences</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/search.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/paginator.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/blog.css' %}" />
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </head>
+
+	<body>
+		<!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <nav id="nav">
+                    {% if user.is_authenticated %}
+                        <button type="button" data-toggle="modal" data-target="#exampleModal" class="publish">Publish Your Experience</button>
+                    {% endif %}
+
+                    <a href="/" style="color: white;">Home</a>
+
+                    {% if user.is_authenticated %}
+                        <a href="profile/{{ user.id }}/" style="color: white;">Hi, {{ user.username }}</a>
+                        <a href="logout" style="color: white;">Logout</a>
+                    {% else %}
+                        <a href="authentication" style="color: white;">Login | Signup</a>
+                    {% endif %}
+                    <div id="wrap">
+                        <form method="GET" action="/blog/search/">
+                            <input type="search" name="value">
+                            <i class="fa fa-search"></i>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+
+            <form method="POST" action="/blog/publish/" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Share Your Experience</h5>
+                            </div>
+
+                            <div class="modal-body">
+                                <input type="text" class="form-control" placeholder="Title" aria-describedby="basic-addon1" name="title">
+                            </div>
+
+                            <div class="modal-body">
+                                <textarea class="form-control" aria-label="With textarea" name="text"></textarea>
+                            </div>
+
+                            <div class="modal-footer">
+                                <input type="file" name="myfiles" multiple>
+                                <button type="button" class="btn-xs btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn-xs btn-primary">Publish</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </header>
+
+		<!-- Banner -->
+        <section id="banner">
+            <h1>Erasmus Experiences</h1>
+            <p>Share your Erasmus experiences to everybody</p>
+        </section>
+
+		<!-- One -->
+        <section id="one" class="wrapper">
+            <div class="inner">
+                <div class="flex flex-3">
+                    {% for post in posts %}
+                    <article>
+                        <header>
+                            <h3>{{ post.title }}</h3>
+                        </header>
+                        <p>{{ post.text | truncatechars:100 }}</p>
+                        <footer>
+                            <h6>Created by {{ post.createdBy.username }}. {{ post.createdAt }}</h6>
+                            <a href="/blog/post/{{ post.id }}" class="button special">Read Experience</a>
+                        </footer>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        <div class="inner" style="text-align: center;">
+            <div class="pagination">
+                {% if posts.has_previous %}
+                    <a href="?page={{ posts.previous_page_number }}">&laquo; Previous</a>
+                {% endif %}
+
+                {% for pg in posts.paginator.page_range %}
+                    {% if posts.number == pg %}
+                        <a class="active" href="?page={{ pg }}">{{ pg }}</a>
+                    {% else %}
+                        <a href="?page={{ pg }}">{{ pg }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if posts.has_next %}
+                    <a href="?page={{ posts.next_page_number }}">Next &raquo;</a>
+                {% endif %}
+            </div>
+        </div>
+
+		<!-- Footer -->
+        <footer id="footer">
+            <div class="inner">
+                <div class="flex">
+                    <div class="copyright">
+                        Share your Erasmus Experiences. Made by Tiago Rios.
+                    </div>
+                    <ul class="icons">
+                        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+                        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+                        <li><a href="#" class="icon fa-linkedin"><span class="label">linkedIn</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+	</body>
+</html>
